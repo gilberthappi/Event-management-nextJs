@@ -1,4 +1,6 @@
-
+import type {
+	ICompanyInputs,
+} from "@/constants/types";
 export interface ICompany {
 	id: number;
 	name: string;
@@ -9,13 +11,17 @@ export interface ICompany {
 	updatedAt: string;
 }
 
+export interface ICreateCompanyValidationError {
+	field: keyof ICompanyInputs;
+	error: string;
+}
 export interface IEvent {
 	id: string;
 	title: string;
 	location: string;
 	description: string;
 	bookingDeadline: string;
-	availableSeats: string;
+	availableSeats: number;
 	createdAt: string;
 	updatedAt: string;
 	numberOfBookings: number;

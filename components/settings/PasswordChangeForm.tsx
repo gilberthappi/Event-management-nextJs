@@ -3,7 +3,7 @@ import TextBox from "@/components/ui/TextBox";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { useToast } from "@/components/ui/use-toast";
-import { resetPasswordSchema } from "@/lib/schema/login";
+import { resetPasswordSchema } from "@/constants/login";
 import type { TResetPasswordSchema } from "@/services/auth";
 import { forgot_password, reset_password } from "@/services/auth";
 import { zodResolver } from "@hookform/resolvers/zod";

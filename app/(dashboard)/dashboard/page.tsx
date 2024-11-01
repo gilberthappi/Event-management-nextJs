@@ -33,15 +33,15 @@ const AdminDashboard = () => {
 	const [selectedYear, setSelectedYear] = useState(currentYear.toString()); // Manage selected year state as a string
 
 	// Fetch stats based on the selected year
-	const { schoolCounts, companyCounts, studentCounts } =
+	const { userCounts, companyCounts, eventCounts } =
 		useAdminStats(selectedYear);
 
 	// Prepare data for the chart
-	const data = schoolCounts.map((schoolCount, index) => ({
+	const data = userCounts.map((userCount, index) => ({
 		month: monthNames[index], // Use month names
-		schools: schoolCount || 0, // Default to 0 if no data
+		users: userCount || 0, // Default to 0 if no data
 		companies: companyCounts[index] || 0, // Default to 0 if no data
-		students: studentCounts[index] || 0, // Default to 0 if no data
+		event: eventCounts[index] || 0, // Default to 0 if no data
 	}));
 
 	// Year selection handler
@@ -55,13 +55,13 @@ const AdminDashboard = () => {
 				<div className="flex-1 flex justify-between items-center">
 					<div className="group flex flex-col items-center bg-white py-12 px-12 lg:px-24 rounded-md hover:shadow-md transition-all duration-75 w-full flex-1 hover:bg-blue-900">
 						<h1 className="font-bold text-2xl text-blue-900 group-hover:text-white">
-							{schoolCounts.reduce(
+							{userCounts.reduce(
 								(a, b) => (Number(a) || 0) + (Number(b) || 0),
 								0,
 							) || 0}
 						</h1>
 						<p className="text-sm text-gray-800 group-hover:text-white">
-							schools
+							users
 						</p>
 					</div>
 					<div className="group flex flex-col items-center bg-white py-12 px-12 lg:px-24 rounded-md hover:shadow-md transition-all duration-75 w-full flex-1 hover:bg-blue-900">
@@ -77,13 +77,13 @@ const AdminDashboard = () => {
 					</div>
 					<div className="group flex flex-col items-center bg-white py-12 px-12 lg:px-24 rounded-md hover:shadow-md transition-all duration-75 w-full flex-1 hover:bg-blue-900">
 						<h1 className="font-bold text-2xl text-blue-900 group-hover:text-white">
-							{studentCounts.reduce(
+							{eventCounts.reduce(
 								(a, b) => (Number(a) || 0) + (Number(b) || 0),
 								0,
 							) || 0}
 						</h1>
 						<p className="text-sm text-gray-800 group-hover:text-white">
-							students
+							event
 						</p>
 					</div>
 				</div>
@@ -114,9 +114,9 @@ const AdminDashboard = () => {
 						<YAxis />
 						<Tooltip />
 						<Legend />
-						<Line type="monotone" dataKey="schools" stroke="#8884d8" />
+						<Line type="monotone" dataKey="users" stroke="#8884d8" />
 						<Line type="monotone" dataKey="companies" stroke="#82ca9d" />
-						<Line type="monotone" dataKey="students" stroke="#ffc658" />
+						<Line type="monotone" dataKey="event" stroke="#ffc658" />
 					</LineChart>
 				</ResponsiveContainer>
 			</div>

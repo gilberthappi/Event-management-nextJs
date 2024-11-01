@@ -8,7 +8,7 @@ const HomePage = () => {
 			<div className="flex flex-col items-center justify-center min-h-screen py-6 bg-gray-50">
 				{/* Heading Section */}
 				<h1 className="text-4xl font-extrabold text-center text-gray-900 mb-6">
-					Welcome to <span className="text-[#840c0c]">EVENT</span> MANAGEMENT
+					Welcome to <span className="text-yellow-600">EVENT</span> MANAGEMENT
 				</h1>
 
 				{/* Subtitle Section */}

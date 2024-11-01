@@ -1,34 +1,34 @@
 import {
-	getApprovedStudentCountCompany,
-	getCompanyStaffCount,
-	getInternshipCountCompany,
+	getFinishedCountCompany,
+	getCompanyEventCount,
+	getBookingsCountCompany,
 } from "@/services/stats";
 import { useEffect, useState } from "react";
 
 export const useCompanyStats = (year: string) => {
-	const [staffCountsByCompany, setStaffCountsByCompany] = useState<number[]>(
+	const [eventsCount, setEventCountsByCompany] = useState<number[]>(
 		[],
 	);
-	const [approvedStudentCountsByCompany, setApprovedStudentCountsByCompany] =
+	const [finishedCount, setFinishedCountsByCompany] =
 		useState<number[]>([]);
-	const [internshipCountsByCompany, setInternshipCountsByCompany] = useState<
+	const [bookingsCount, setBookingsCountsByCompany] = useState<
 		number[]
 	>([]);
 
 	useEffect(() => {
 		const fetchStats = async () => {
 			try {
-				const fetchedStaffCountsByCompany = await getCompanyStaffCount(year);
-				const fetchedApprovedStudentCountsByCompany =
-					await getApprovedStudentCountCompany(year);
-				const fetchedInternshipCountsByCompany =
-					await getInternshipCountCompany(year);
+				const fetchedEventCountsByCompany = await getCompanyEventCount(year);
+				const fetchedFinishedCountsByCompany =
+					await getFinishedCountCompany(year);
+				const fetchedBookingsByCompany =
+					await getBookingsCountCompany(year);
 
-				setStaffCountsByCompany(fetchedStaffCountsByCompany);
-				setApprovedStudentCountsByCompany(
-					fetchedApprovedStudentCountsByCompany,
+					setEventCountsByCompany(fetchedEventCountsByCompany);
+					setFinishedCountsByCompany(
+						fetchedFinishedCountsByCompany,
 				);
-				setInternshipCountsByCompany(fetchedInternshipCountsByCompany);
+				setBookingsCountsByCompany(fetchedBookingsByCompany);
 			} catch (error) {
 				console.error("Error fetching company stats", error);
 			}
@@ -38,8 +38,8 @@ export const useCompanyStats = (year: string) => {
 	}, [year]);
 
 	return {
-		staffCountsByCompany,
-		approvedStudentCountsByCompany,
-		internshipCountsByCompany,
+		eventsCount,
+		finishedCount,
+		bookingsCount,
 	};
 };

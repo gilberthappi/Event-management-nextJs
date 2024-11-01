@@ -44,3 +44,21 @@ export type IBoookingInfo = {
 	createdAt: string;
 	updatedAt: string;
 };
+type Modify<T, R> = Omit<T, keyof R> & R;
+export type ICompanyFullInfo = Modify<
+	ICompanyInputs,
+	{
+		company: Modify<
+			ICompanyInputs["company"],
+			{
+				id: string;
+			}
+		>;
+		contactPerson: Modify<
+			ICompanyInputs["contactPerson"],
+			{
+				id: string;
+			}
+		>;
+	}
+>;

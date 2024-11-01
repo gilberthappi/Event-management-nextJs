@@ -36,17 +36,17 @@ const CompanyDashboard = () => {
 
 	// Fetch stats based on the selected year
 	const {
-		staffCountsByCompany,
-		internshipCountsByCompany,
-		approvedStudentCountsByCompany,
+		eventsCount,
+		finishedCount,
+		bookingsCount,
 	} = useCompanyStats(selectedYear);
 
 	// Prepare data for the chart
-	const data = staffCountsByCompany.map((staffCountsByCompany, index) => ({
+	const data = eventsCount.map((eventsCount, index) => ({
 		month: monthNames[index], // Use month names
-		staff: staffCountsByCompany || 0, // Default to 0 if no data
-		internships: internshipCountsByCompany[index] || 0, // Default to 0 if no data
-		interns: approvedStudentCountsByCompany[index] || 0, // Default to 0 if no data
+		events: eventsCount || 0, // Default to 0 if no data
+		finished: finishedCount[index] || 0, // Default to 0 if no data
+		bookings: bookingsCount[index] || 0, // Default to 0 if no data
 	}));
 
 	// Year selection handler
@@ -60,35 +60,35 @@ const CompanyDashboard = () => {
 				<div className="flex-1 flex justify-between items-center">
 					<div className="group flex flex-col items-center bg-white py-12 px-12 lg:px-24 rounded-md hover:shadow-md transition-all duration-75 w-full flex-1 hover:bg-blue-900">
 						<h1 className="font-bold text-2xl text-blue-900 group-hover:text-white">
-							{staffCountsByCompany.reduce(
+							{eventsCount.reduce(
 								(a, b) => (Number(a) || 0) + (Number(b) || 0),
 								0,
 							) || 0}
 						</h1>
 						<p className="text-sm text-gray-800 group-hover:text-white">
-							staff
+							total events
 						</p>
 					</div>
 					<div className="group flex flex-col items-center bg-white py-12 px-12 lg:px-24 rounded-md hover:shadow-md transition-all duration-75 w-full flex-1 hover:bg-blue-900">
 						<h1 className="font-bold text-2xl text-blue-900 group-hover:text-white">
-							{internshipCountsByCompany.reduce(
+							{finishedCount.reduce(
 								(a, b) => (Number(a) || 0) + (Number(b) || 0),
 								0,
 							) || 0}
 						</h1>
 						<p className="text-sm text-gray-800 group-hover:text-white">
-							internships
+							finished event
 						</p>
 					</div>
 					<div className="group flex flex-col items-center bg-white py-12 px-12 lg:px-24 rounded-md hover:shadow-md transition-all duration-75 w-full flex-1 hover:bg-blue-900">
 						<h1 className="font-bold text-2xl text-blue-900 group-hover:text-white">
-							{approvedStudentCountsByCompany.reduce(
+							{bookingsCount.reduce(
 								(a, b) => (Number(a) || 0) + (Number(b) || 0),
 								0,
 							) || 0}
 						</h1>
 						<p className="text-sm text-gray-800 group-hover:text-white">
-							interns
+							total bookings
 						</p>
 					</div>
 				</div>
@@ -119,9 +119,9 @@ const CompanyDashboard = () => {
 						<YAxis />
 						<Tooltip />
 						<Legend />
-						<Line type="monotone" dataKey="staff" stroke="#8884d8" />
-						<Line type="monotone" dataKey="internships" stroke="#82ca9d" />
-						<Line type="monotone" dataKey="interns" stroke="#ffc658" />
+						<Line type="monotone" dataKey="events" stroke="#8884d8" />
+						<Line type="monotone" dataKey="finished" stroke="#82ca9d" />
+						<Line type="monotone" dataKey="bookings" stroke="#ffc658" />
 					</LineChart>
 				</ResponsiveContainer>
 			</div>

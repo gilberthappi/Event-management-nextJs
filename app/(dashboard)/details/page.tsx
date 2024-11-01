@@ -1,7 +1,7 @@
 "use client";
-import JobCard from "@/components/internship/JobCardCopy";
+import JobCard from "@/components/events/JobCardCopy";
 import PageContent from "@/components/shared/PageContent";
-import { getAllJobPosts } from "@/services/jobPost";
+import { getAllJobPosts } from "@/services/event";
 import type { IJobPost } from "@/types/index";
 import { useQuery } from "@tanstack/react-query";
 import type React from "react";

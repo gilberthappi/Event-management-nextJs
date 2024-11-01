@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const CreateBookingSchema = z.object({
 	userId: z
-	.string()
+	.number()
 	.optional(),
 	eventId: z.string({ required_error: "event post required" }).min(1),
 	numberOfseats: z.number({ required_error: "Number of seats required" }),

@@ -3,8 +3,8 @@
 
 import PageContent from "@/components/shared/PageContent";
 import { Button } from "@/components/ui/button";
-import { isShortlistedOrApproved } from "@/services/application";
-import { getJobPost } from "@/services/jobPost";
+import { isShortlistedOrApproved } from "@/services/booking";
+import { getJobPost } from "@/services/event";
 
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { useQuery } from "@tanstack/react-query";

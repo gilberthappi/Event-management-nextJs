@@ -1,3 +1,5 @@
+// /home/happi/Project/Event-management-nextJs/components/CompanyForm.tsx
+
 "use client";
 import PageContent from "@/components/shared/PageContent";
 import Section from "@/components/shared/Section";
@@ -5,10 +7,6 @@ import TextBox from "@/components/ui/TextBox";
 import { Button } from "@/components/ui/button";
 import {
 	Form,
-	FormControl,
-	FormField,
-	FormLabel,
-	FormMessage,
 } from "@/components/ui/form";
 import { useToast } from "@/components/ui/use-toast";
 import {
@@ -17,17 +15,13 @@ import {
 } from "@/constants/company.schema";
 import type { ICompanyFullInfo } from "@/constants/types";
 import { createCompany, updateCompany } from "@/services/companies";
-import type { ICreateCompanyValidationError } from "@/types";
-import { PaperClipIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { AxiosError } from "axios";
 import Link from "next/link";
 import type React from "react";
 import { type FC, useRef } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
-import { useFieldArray } from "react-hook-form";
 import type { z } from "zod";
 
 interface CompanyFormProps {
@@ -35,7 +29,6 @@ interface CompanyFormProps {
 	defaults?: ICompanyFullInfo;
 	isLoading?: boolean;
 }
-const Roles = ["COMPANY_ADMIN"];
 
 const CompanyForm: FC<CompanyFormProps> = (props) => {
 	const formRef = useRef(null);
@@ -43,29 +36,32 @@ const CompanyForm: FC<CompanyFormProps> = (props) => {
 	const client = useQueryClient();
 
 	const defaultValues = props.isUpdate
-		? props.defaults
+		? {
+				company: {
+					name: props.defaults?.company.name || "",
+					address: props.defaults?.company.address || "",
+					email: props.defaults?.company.email || "",
+					phoneNumber: props.defaults?.company.phoneNumber || "",
+				},
+				contactPerson: {
+					firstName: props.defaults?.contactPerson.firstName || "",
+					lastName: props.defaults?.contactPerson.lastName || "",
+					email: props.defaults?.contactPerson.email || "",
+					phoneNumber: props.defaults?.contactPerson.phoneNumber || "",
+				},
+			}
 		: {
 				company: {
 					name: "",
 					address: "",
 					email: "",
 					phoneNumber: "",
-					economicSector: ["IT"],
-					bankName: "",
-					accountNumber: "",
-					TIN: "",
-					certificate: null as unknown as File,
-					type: "",
 				},
 				contactPerson: {
 					firstName: "",
 					lastName: "",
 					email: "",
 					phoneNumber: "",
-					title: "",
-					role: "",
-					idNumber: "",
-					idAttachment: null as unknown as File,
 				},
 			};
 
@@ -86,113 +82,53 @@ const CompanyForm: FC<CompanyFormProps> = (props) => {
 				queryKey: ["COMPANIES"],
 			});
 		},
-		onError: (error) => {
-			if (error instanceof AxiosError) {
-				if (error.response?.data?.error === "validate") {
-					error.response.data.data.map((err: ICreateCompanyValidationError) => {
-						form.setError(err.field, {
-							type: "manual",
-							message: err.error,
-						});
-					});
-				}
-				toast({
-					title: error.response?.data.message ?? "Failed to create company",
-					variant: "destructive",
-				});
-			} else {
-				toast({
-					title: "Failed to create company",
-					variant: "destructive",
-				});
-			}
-		},
+		onError: () => {
+			toast({
+				title: "Failed to create company",
+				variant: "destructive",
+			});
+		}
 	});
 	const updateCompanyMutation = useMutation({
-		mutationFn: (formData: FormData) =>
+		mutationFn: (formData: { company: any; contactPerson: any }) =>
 			updateCompany(formData, props.defaults?.company.id as string),
 		onSuccess: () => {
 			toast({
-				title: "company Updated!",
+				title: "Company Updated!",
 				variant: "primary",
 			});
 			client.invalidateQueries({
 				queryKey: ["COMPANIES"],
 			});
 		},
-		onError: (error) => {
-			if (error instanceof AxiosError) {
-				if (error.response?.data?.error === "validate") {
-					error.response.data.data.map((err: ICreateCompanyValidationError) => {
-						form.setError(err.field, {
-							type: "manual",
-							message: err.error,
-						});
-					});
-				}
-				toast({
-					title: error.response?.data.message ?? "Failed to update company",
-					variant: "destructive",
-				});
-			} else {
-				toast({
-					title: "Failed to update company",
-					variant: "destructive",
-				});
-			}
-		},
-	});
-
-	const { fields, append, remove } = useFieldArray({
-		control: form.control,
-		// @ts-ignore
-		name: "company.economicSector",
+		onError: () => {
+			toast({
+				title: "Failed to update company",
+				variant: "destructive",
+			});
+		}
 	});
 	const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = async (data) => {
-		const formData = new FormData();
-		formData.append("company[name]", data.company.name);
-		formData.append("company[address]", data.company.address ?? "");
-		formData.append("company[email]", data.company.email);
-		formData.append("company[phoneNumber]", data.company.phoneNumber ?? "");
-		formData.append("company[bankName]", data.company.bankName ?? "");
-		formData.append("company[accountNumber]", data.company.accountNumber ?? "");
-		formData.append("company[TIN]", data.company.TIN ?? "");
-		formData.append("company[type]", data.company.type ?? "");
-		data.company.economicSector.forEach((sector, index) => {
-			formData.append(`company[economicSector][${index}]`, sector);
-		});
-		formData.append("company[certificate]", data.company.certificate);
-		formData.append("contactPerson[firstName]", data.contactPerson.firstName);
-		formData.append("contactPerson[lastName]", data.contactPerson.lastName);
-		formData.append("contactPerson[email]", data.contactPerson.email);
-		formData.append(
-			"contactPerson[phoneNumber]",
-			data.contactPerson.phoneNumber ?? "",
-		);
-		formData.append("contactPerson[title]", data.contactPerson.title ?? "");
-		formData.append("contactPerson[role]", data.contactPerson.role);
-		formData.append(
-			"contactPerson[idNumber]",
-			data.contactPerson.idNumber ?? "",
-		);
-		formData.append(
-			"contactPerson[idAttachment]",
-			data.contactPerson.idAttachment,
-		);
+		const formData = {
+			company: {
+				name: data.company.name,
+				address: data.company.address ?? "",
+				email: data.company.email,
+				phoneNumber: data.company.phoneNumber ?? "",
+			},
+			contactPerson: {
+				firstName: data.contactPerson.firstName,
+				lastName: data.contactPerson.lastName,
+				email: data.contactPerson.email,
+				phoneNumber: data.contactPerson.phoneNumber ?? "",
+			}
+		};
+
 		if (props.isUpdate && props.defaults) {
-			formData.append("contactPerson[userId]", props.defaults.contactPerson.id);
 			updateCompanyMutation.mutate(formData);
 		} else {
 			mutation.mutate(formData);
 		}
-	};
-
-	const getCompanyCertificate = (e: React.ChangeEvent<HTMLInputElement>) => {
-		form.setValue("company.certificate", e.target.files?.[0]);
-	};
-
-	const getIdAttachment = (e: React.ChangeEvent<HTMLInputElement>) => {
-		form.setValue("contactPerson.idAttachment", e.target.files?.[0]);
 	};
 
 	return (
@@ -245,92 +181,6 @@ const CompanyForm: FC<CompanyFormProps> = (props) => {
 										placeholder="+250728858833"
 										control={form.control}
 									/>
-									<TextBox
-										label="Bank Name"
-										type="text"
-										name="company.bankName"
-										placeholder="Equity"
-										control={form.control}
-									/>
-									<TextBox
-										label="Account Number"
-										type="text"
-										name="company.accountNumber"
-										placeholder="4012345679"
-										control={form.control}
-									/>
-									<TextBox
-										label="TIN Number"
-										type="text"
-										name="company.TIN"
-										placeholder="1293385716"
-										control={form.control}
-									/>
-									<div className="relative">
-										<TextBox
-											onChange={getCompanyCertificate}
-											placeholder="RDB / RGB certificates"
-											label="Registration Certificate"
-											type="file"
-											name="company.certificate"
-											control={form.control}
-										/>
-										{props.defaults && (
-											<div className="absolute p-2 right-0 top-9">
-												<Link
-													target="_blank"
-													href={props.defaults.company.certificateUrl}
-												>
-													<PaperClipIcon className="w-6 text-primary" />
-												</Link>
-											</div>
-										)}
-									</div>
-									<TextBox
-										label="Type"
-										type="text"
-										name="company.type"
-										placeholder="Private"
-										control={form.control}
-									/>
-								</div>
-							</Section>
-							<Section title="Sectors of operations">
-								<div className="grid md:grid-cols-4 gap-4">
-									{fields.map((field, idx) => (
-										<div className="space-y-1 cursor-pointer" key={idx}>
-											<TrashIcon
-												onClick={() => remove(idx)}
-												className="text-destructive w-4"
-											/>
-											<TextBox
-												type="text"
-												name={`company.economicSector.${idx}`}
-												placeholder="1293385716"
-												control={form.control}
-											/>
-										</div>
-									))}
-								</div>
-								<div>
-									<span
-										className="p-1 text-primary text-xs font-semibold cursor-pointer"
-										onClick={() => append("")}
-									>
-										Add sector of operations
-									</span>
-								</div>
-								<div className="mt-1">
-									<span className="text-xs text-destructive">
-										{form.formState.errors.company?.economicSector && (
-											<p>
-												{
-													form.formState.errors.company.economicSector.root
-														?.message
-												}
-											</p>
-										)}
-									</span>
 								</div>
 							</Section>
 							<Section title="Contact Person">
@@ -353,7 +203,7 @@ const CompanyForm: FC<CompanyFormProps> = (props) => {
 										label="Email"
 										type="email"
 										name="contactPerson.email"
-										placeholder="johndoe@domain.df"
+										placeholder="johndoe@domain.com"
 										control={form.control}
 									/>
 									<TextBox
@@ -363,65 +213,6 @@ const CompanyForm: FC<CompanyFormProps> = (props) => {
 										placeholder="+250728858833"
 										control={form.control}
 									/>
-									<TextBox
-										label="Title"
-										type="text"
-										name="contactPerson.title"
-										placeholder="Mr,Miss,Dr, etc .."
-										control={form.control}
-									/>
-									<FormField
-										control={form.control}
-										name="contactPerson.role"
-										render={({ field }) => (
-											<div>
-												<FormLabel className="text-gray-500 text-xs">
-													Role
-												</FormLabel>
-												<FormControl>
-													<select
-														{...field}
-														className="w-full rounded-md border bg-background px-3 py-3 text-sm"
-													>
-														<option value="">select</option>
-														{Roles.map((type) => (
-															<option key={type} value={type}>
-																{type}
-															</option>
-														))}
-													</select>
-												</FormControl>
-												<FormMessage />
-											</div>
-										)}
-									/>
-									<TextBox
-										label="ID/Passport number"
-										type="text"
-										name="contactPerson.idNumber"
-										placeholder="1293385716"
-										control={form.control}
-									/>
-									<div className="relative">
-										<TextBox
-											label="ID/Passport attachment"
-											onChange={getIdAttachment}
-											type="file"
-											name="contactPerson.idAttachment"
-											placeholder="1293385716"
-											control={form.control}
-										/>
-										{props.defaults && (
-											<div className="absolute p-2 right-0 top-9">
-												<Link
-													target="_blank"
-													href={props.defaults.contactPerson.idAttachmentUrl}
-												>
-													<PaperClipIcon className="w-6 text-primary" />
-												</Link>
-											</div>
-										)}
-									</div>
 								</div>
 							</Section>
 							<div>
@@ -441,4 +232,5 @@ const CompanyForm: FC<CompanyFormProps> = (props) => {
 		</PageContent>
 	);
 };
+
 export default CompanyForm;

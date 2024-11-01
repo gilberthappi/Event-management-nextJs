@@ -1,25 +1,25 @@
 import {
 	getCompanieCount,
-	getSchoolsCount,
-	getStudentCount,
+	getUsersCount,
+	getEventCount,
 } from "@/services/stats";
 import { useEffect, useState } from "react";
 
 export const useAdminStats = (year: string) => {
-	const [schoolCounts, setSchoolCounts] = useState<number[]>([]);
+	const [userCounts, setUsersCounts] = useState<number[]>([]);
 	const [companyCounts, setCompanyCounts] = useState<number[]>([]);
-	const [studentCounts, setStudentCounts] = useState<number[]>([]);
+	const [eventCounts, setEventCounts] = useState<number[]>([]);
 
 	useEffect(() => {
 		const fetchStats = async () => {
 			try {
-				const fetchedSchoolCounts = await getSchoolsCount(year);
+				const fetchedUserCounts = await getUsersCount(year);
 				const fetchedCompanyCounts = await getCompanieCount(year);
-				const fetchedStudentCounts = await getStudentCount(year);
+				const fetchedEventCounts = await getEventCount(year);
 
-				setSchoolCounts(fetchedSchoolCounts);
+				setUsersCounts(fetchedUserCounts);
 				setCompanyCounts(fetchedCompanyCounts);
-				setStudentCounts(fetchedStudentCounts);
+				setEventCounts(fetchedEventCounts);
 			} catch (error) {
 				console.error("Error fetching admin stats", error);
 			}
@@ -29,8 +29,8 @@ export const useAdminStats = (year: string) => {
 	}, [year]);
 
 	return {
-		schoolCounts,
+		userCounts,
 		companyCounts,
-		studentCounts,
+		eventCounts,
 	};
 };

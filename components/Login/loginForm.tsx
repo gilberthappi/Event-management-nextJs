@@ -81,7 +81,7 @@ export const LoginForm = () => {
 	return (
 		<div className="h-screen lg:w-1/2 bg-white p-8 flex flex-col justify-center items-center">
 			<Image
-				src="/ngirologo.png"
+				src="/ngirologo1.png"
 				alt="Logo"
 				className="h-20 mb-8"
 				width={200}

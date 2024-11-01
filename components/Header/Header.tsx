@@ -50,8 +50,8 @@ const Header = () => {
 
 				{/* Logo */}
 				<Link href="/">
-					<Typography variant="h4" className="text-green-800 font-bold sm:pl-5">
-						<span className="text-[#840c0c]">EVENT</span> MANAGEMENT
+					<Typography variant="h4" className="text-blue-900 font-bold sm:pl-5">
+						<span className="text-yellow-600">EVENT</span> MANAGEMENT
 					</Typography>
 				</Link>
 			</div>
@@ -60,7 +60,7 @@ const Header = () => {
 			<div className="flex items-center">
 				{/* Navigation Links */}
 				<nav className="hidden sm:flex items-center gap-6">
-					{["home", "about", "event", "contact"].map((section) => (
+					{["home", "event", "contact"].map((section) => (
 						<button
 							key={section}
 							type="button"
@@ -69,7 +69,7 @@ const Header = () => {
 						>
 							<Typography
 								variant="h6"
-								className="text-gray-700 hover:text-green-600"
+								className="text-blue-900 hover:text-yellow-600"
 							>
 								{section.charAt(0).toUpperCase() + section.slice(1)}
 							</Typography>
@@ -79,15 +79,15 @@ const Header = () => {
 
 				{/* Book Now Button */}
 				<div className="ml-5">
-					<Link href="/auth/signin">
-						<Typography
-							variant="h6"
-							className="text-white bg-[#840c0c] px-3 py-2 rounded-full text-lg"
-						>
-							Book now
-						</Typography>
-					</Link>
-				</div>
+  <Link href="#event">
+    <Typography
+      variant="h6"
+      className="text-white bg-yellow-600 px-3 py-2 rounded-full text-lg"
+    >
+      Book Now
+    </Typography>
+  </Link>
+</div>
 			</div>
 
 			{/* Mobile Menu */}
@@ -118,7 +118,7 @@ const Header = () => {
 					</div>
 
 					<nav className="flex flex-col items-start py-2">
-						{["home", "about", "event", "contact"].map((section) => (
+						{["home", "event", "contact"].map((section) => (
 							<button
 								key={section}
 								type="button"
@@ -130,7 +130,7 @@ const Header = () => {
 							>
 								<Typography
 									variant="h6"
-									className="text-gray-700 hover:text-green-600"
+									className="text-gray-700 hover:text-blue-600"
 								>
 									{section.charAt(0).toUpperCase() + section.slice(1)}
 								</Typography>
