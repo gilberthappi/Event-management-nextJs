@@ -82,13 +82,13 @@
 <!-- LIVE DEMO -->
 
 ## 🚀 Live Demo <a name="live-demo"></a>
-
-(((Coming soon!!)))
-
+ ```sh
+https://event-management-next-js.vercel.app/
+```
 - [ ] **Swagger Documentation from BackEnd**
 
    ```sh
-   (((Coming soon!!)))
+   https://event-management-nextjs-api-production.up.railway.app/docs/#/
    ```
 
 <!-- GETTING STARTED -->
