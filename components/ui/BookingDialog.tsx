@@ -7,7 +7,8 @@ import {
     DialogDescription,
 } from "../ui/dialog";
 import { book } from "@/services/booking";
-import { useToast } from "@/components/ui/use-toast"; // Import your custom toast hook
+import { useToast } from "@/components/ui/use-toast";
+import { QueryClient } from "@tanstack/react-query";
 
 interface BookingDialogProps {
     event: {
@@ -32,6 +33,7 @@ const BookingDialog: React.FC<BookingDialogProps> = ({ event, isOpen, onClose })
     const [email, setEmail] = useState("");
     const [seats, setSeats] = useState(1);
     const [errors, setErrors] = useState<{ phone?: string; email?: string; seats?: string }>({});
+    const queryClient = new QueryClient();
 
     const validateForm = () => {
         const newErrors: { phone?: string; email?: string; seats?: string } = {};
@@ -73,6 +75,7 @@ const BookingDialog: React.FC<BookingDialogProps> = ({ event, isOpen, onClose })
                 title: "Booking successful!", // Use the toast from your custom hook
                 variant: "primary",
             });
+            queryClient.invalidateQueries({ queryKey: ["EVENT"] });
             onClose();
         } catch (error) {
             console.error("Booking failed:", error);
@@ -106,7 +109,7 @@ const BookingDialog: React.FC<BookingDialogProps> = ({ event, isOpen, onClose })
                     </DialogDescription>
                     <div className="text-gray-600 mb-4">
                         <strong>Description:</strong>
-                        <p className="mt-2">{event.description}</p>
+                        <p className="mt-2">{event.description.replace(/<\/?[^>]+(>|$)/g, "")}</p>
                     </div>
                 </DialogHeader>
                 <div className="mt-6 space-y-5">
@@ -135,7 +138,7 @@ const BookingDialog: React.FC<BookingDialogProps> = ({ event, isOpen, onClose })
                     <label className="block">
                         <span className="text-gray-700 font-medium">Number of Seats</span>
                         <input
-                            type="number"
+                            type="tel"
                             value={seats}
                             onChange={(e) => setSeats(Number(e.target.value))}
                             className={`mt-1 block w-full border ${errors.seats ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 ease-in-out p-2`}
